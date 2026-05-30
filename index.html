@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kostenloser Brutto-Netto-Rechner 2026 für Deutschland. Berechnen Sie Ihr Nettogehalt mit Lohnsteuer (BMF PAP 2026), Solidaritätszuschlag, Kirchensteuer und allen Sozialversicherungsbeiträgen." />
+    <title>Brutto-Netto-Rechner 2026 | Gehalt netto berechnen</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💶</text></svg>" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+
+    <header class="site-header">
+      <div class="container">
+        <h1 class="site-header__title">Brutto-Netto-Rechner 2026</h1>
+        <p class="site-header__subtitle">Ihr geschätztes Nettogehalt für Deutschland – transparent und kostenlos berechnet</p>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <div class="container">
+
+        <!-- ============ CALCULATOR ============ -->
+        <section class="calculator-section" aria-label="Gehaltsrechner">
+          <div class="calculator-layout">
+
+            <!-- FORM -->
+            <div class="calculator-form-col">
+              <form id="calculator-form" novalidate aria-label="Eingabeformular Brutto-Netto-Rechner">
+
+                <!-- Gehalt -->
+                <fieldset class="fieldset">
+                  <legend class="fieldset__legend">Gehalt</legend>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-brutto">
+                      Bruttogehalt
+                      <span class="field-unit">€</span>
+                    </label>
+                    <input
+                      class="field-input"
+                      type="text"
+                      id="field-brutto"
+                      name="brutto"
+                      inputmode="decimal"
+                      value="4.000"
+                      autocomplete="off"
+                      aria-describedby="error-brutto"
+                    />
+                    <span class="field-error" id="error-brutto" aria-live="polite"></span>
+                  </div>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-period">Zeitraum</label>
+                    <select class="field-input" id="field-period" name="period">
+                      <option value="monthly" selected>Monatlich</option>
+                      <option value="yearly">Jährlich</option>
+                    </select>
+                  </div>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-taxclass">Steuerklasse</label>
+                    <select class="field-input" id="field-taxclass" name="taxclass" aria-describedby="error-taxClass">
+                      <option value="1" selected>I</option>
+                      <option value="2">II</option>
+                      <option value="3">III</option>
+                      <option value="4">IV</option>
+                      <option value="5">V</option>
+                      <option value="6">VI</option>
+                    </select>
+                    <span class="field-error" id="error-taxClass" aria-live="polite"></span>
+                  </div>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-state">Bundesland</label>
+                    <select class="field-input" id="field-state" name="state" aria-describedby="error-federalState">
+                      <option value="BW">Baden-Württemberg</option>
+                      <option value="BY">Bayern</option>
+                      <option value="BE">Berlin</option>
+                      <option value="BB">Brandenburg</option>
+                      <option value="HB">Bremen</option>
+                      <option value="HH">Hamburg</option>
+                      <option value="HE">Hessen</option>
+                      <option value="MV">Mecklenburg-Vorpommern</option>
+                      <option value="NI">Niedersachsen</option>
+                      <option value="NW" selected>Nordrhein-Westfalen</option>
+                      <option value="RP">Rheinland-Pfalz</option>
+                      <option value="SL">Saarland</option>
+                      <option value="SN">Sachsen</option>
+                      <option value="ST">Sachsen-Anhalt</option>
+                      <option value="SH">Schleswig-Holstein</option>
+                      <option value="TH">Thüringen</option>
+                    </select>
+                    <span class="field-error" id="error-federalState" aria-live="polite"></span>
+                  </div>
+
+                  <div class="field-row field-row--checkbox">
+                    <input
+                      class="field-checkbox"
+                      type="checkbox"
+                      id="field-kirche"
+                      name="kirche"
+                    />
+                    <label class="field-label field-label--checkbox" for="field-kirche">
+                      Kirchensteuerpflichtig
+                    </label>
+                  </div>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-kfb">
+                      Kinderfreibeträge
+                      <span class="field-hint">(0; 0,5; 1; 1,5 …)</span>
+                    </label>
+                    <input
+                      class="field-input"
+                      type="number"
+                      id="field-kfb"
+                      name="kfb"
+                      value="0"
+                      min="0"
+                      max="10"
+                      step="0.5"
+                      aria-describedby="error-childAllowance"
+                    />
+                    <span class="field-error" id="error-childAllowance" aria-live="polite"></span>
+                  </div>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-age">Alter</label>
+                    <input
+                      class="field-input"
+                      type="number"
+                      id="field-age"
+                      name="age"
+                      value="35"
+                      min="14"
+                      max="100"
+                      aria-describedby="error-age"
+                    />
+                    <span class="field-error" id="error-age" aria-live="polite"></span>
+                  </div>
+                </fieldset>
+
+                <!-- Krankenversicherung -->
+                <fieldset class="fieldset">
+                  <legend class="fieldset__legend">Krankenversicherung</legend>
+
+                  <div class="field-row">
+                    <label class="field-label" for="field-kv-type">Versicherung</label>
+                    <select class="field-input" id="field-kv-type" name="kv-type">
+                      <option value="statutory" selected>Gesetzlich (GKV)</option>
+                      <option value="private">Privat (PKV)</option>
+                    </select>
+                  </div>
+
+                  <div class="field-row" id="gkv-row">
+                    <label class="field-label" for="field-kvz">
+                      GKV-Zusatzbeitrag
+                      <span class="field-unit">%</span>
+                    </label>
+                    <input
+                      class="field-input"
+                      type="number"
+                      id="field-kvz"
+                      name="kvz"
+                      value="2.9"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      aria-describedby="error-kvz"
+                    />
+                    <span class="field-error" id="error-kvz" aria-live="polite"></span>
+                  </div>
+
+                  <div class="field-row" id="pkv-row" hidden>
+                    <label class="field-label" for="field-pkv">
+                      PKV-Beitrag monatlich
+                      <span class="field-unit">€</span>
+                    </label>
+                    <input
+                      class="field-input"
+                      type="text"
+                      id="field-pkv"
+                      name="pkv"
+                      inputmode="decimal"
+                      value="0"
+                      aria-describedby="error-pkv"
+                    />
+                    <span class="field-error" id="error-pkv" aria-live="polite"></span>
+                  </div>
+                </fieldset>
+
+                <!-- Sozialversicherung (erweitert) -->
+                <details class="advanced-section">
+                  <summary class="advanced-section__toggle">Weitere Optionen (SV, Freibeträge)</summary>
+                  <div class="advanced-content">
+
+                    <fieldset class="fieldset">
+                      <legend class="fieldset__legend">Sozialversicherungspflicht</legend>
+
+                      <div class="field-row field-row--checkbox">
+                        <input class="field-checkbox" type="checkbox" id="field-rv" name="rv" checked />
+                        <label class="field-label field-label--checkbox" for="field-rv">Rentenversicherungspflichtig</label>
+                      </div>
+
+                      <div class="field-row field-row--checkbox">
+                        <input class="field-checkbox" type="checkbox" id="field-av" name="av" checked />
+                        <label class="field-label field-label--checkbox" for="field-av">Arbeitslosenversicherungspflichtig</label>
+                      </div>
+
+                      <div class="field-row field-row--checkbox">
+                        <input class="field-checkbox" type="checkbox" id="field-pv" name="pv" checked />
+                        <label class="field-label field-label--checkbox" for="field-pv">Pflegeversicherungspflichtig</label>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                      <legend class="fieldset__legend">Pflegeversicherung</legend>
+
+                      <div class="field-row field-row--checkbox">
+                        <input class="field-checkbox" type="checkbox" id="field-childless" name="childless" />
+                        <label class="field-label field-label--checkbox" for="field-childless">
+                          Kinderlos (ab 23 Jahren: Kinderlosenzuschlag)
+                        </label>
+                      </div>
+
+                      <div class="field-row" id="children-row">
+                        <label class="field-label" for="field-children">
+                          Kinder unter 25 Jahren
+                        </label>
+                        <input
+                          class="field-input"
+                          type="number"
+                          id="field-children"
+                          name="children"
+                          value="0"
+                          min="0"
+                          max="20"
+                          aria-describedby="error-children"
+                        />
+                        <span class="field-error" id="error-children" aria-live="polite"></span>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                      <legend class="fieldset__legend">Freibeträge / Hinzurechnungsbeträge</legend>
+
+                      <div class="field-row">
+                        <label class="field-label" for="field-freibetrag">
+                          Monatlicher Freibetrag
+                          <span class="field-unit">€</span>
+                        </label>
+                        <input
+                          class="field-input"
+                          type="text"
+                          id="field-freibetrag"
+                          name="freibetrag"
+                          inputmode="decimal"
+                          value=""
+                          placeholder="0"
+                          aria-describedby="error-frei"
+                        />
+                        <span class="field-error" id="error-frei" aria-live="polite"></span>
+                      </div>
+
+                      <div class="field-row">
+                        <label class="field-label" for="field-hinzu">
+                          Monatlicher Hinzurechnungsbetrag
+                          <span class="field-unit">€</span>
+                        </label>
+                        <input
+                          class="field-input"
+                          type="text"
+                          id="field-hinzu"
+                          name="hinzu"
+                          inputmode="decimal"
+                          value=""
+                          placeholder="0"
+                          aria-describedby="error-hinzu"
+                        />
+                        <span class="field-error" id="error-hinzu" aria-live="polite"></span>
+                      </div>
+                    </fieldset>
+
+                  </div>
+                </details>
+
+                <div class="form-actions">
+                  <button class="btn btn--primary" id="btn-calculate" type="button">
+                    Berechnen
+                  </button>
+                  <button class="btn btn--secondary" id="btn-reset" type="button">
+                    Zurücksetzen
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+            <!-- RESULTS -->
+            <div class="calculator-results-col" id="results-section" hidden aria-live="off">
+
+              <!-- Live-Region für Screenreader -->
+              <div id="results-live" aria-live="polite" class="sr-only"></div>
+
+              <!-- Hauptergebnis -->
+              <div class="result-highlight" aria-label="Hauptergebnis">
+                <div class="result-highlight__label">Netto monatlich (geschätzt)</div>
+                <div class="result-highlight__value" id="result-net-monthly">–</div>
+                <div class="result-highlight__secondary">
+                  <span id="result-net-yearly">–</span> jährlich
+                </div>
+              </div>
+
+              <!-- Abgaben-Balken -->
+              <div id="deduction-chart" class="deduction-chart" aria-hidden="true"></div>
+              <div class="chart-legend">
+                <span class="legend-dot" style="background:var(--color-tax)"></span> Lohnsteuer &nbsp;
+                <span class="legend-dot" style="background:var(--color-kv)"></span> KV &nbsp;
+                <span class="legend-dot" style="background:var(--color-pv)"></span> PV &nbsp;
+                <span class="legend-dot" style="background:var(--color-rv)"></span> RV &nbsp;
+                <span class="legend-dot" style="background:var(--color-av)"></span> AV &nbsp;
+                <span class="legend-dot" style="background:var(--color-net)"></span> Netto
+              </div>
+
+              <!-- Aufschlüsselung -->
+              <section class="breakdown" aria-label="Detailaufschlüsselung">
+
+                <table class="breakdown-table">
+                  <caption class="breakdown-table__caption">Aufschlüsselung monatlich / jährlich</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Position</th>
+                      <th scope="col" class="col-num">Monatlich</th>
+                      <th scope="col" class="col-num">Jährlich</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="breakdown-table__section-head">
+                      <th scope="row" colspan="3">Bruttogehalt</th>
+                    </tr>
+                    <tr>
+                      <td>Brutto</td>
+                      <td class="col-num" id="result-gross-monthly">–</td>
+                      <td class="col-num" id="result-gross-yearly">–</td>
+                    </tr>
+
+                    <tr class="breakdown-table__section-head">
+                      <th scope="row" colspan="3">Steuern (Arbeitnehmer)</th>
+                    </tr>
+                    <tr>
+                      <td>Lohnsteuer</td>
+                      <td class="col-num" id="result-lst-monthly">–</td>
+                      <td class="col-num" id="result-lst-yearly">–</td>
+                    </tr>
+                    <tr>
+                      <td>Solidaritätszuschlag</td>
+                      <td class="col-num" id="result-soli-monthly">–</td>
+                      <td class="col-num" id="result-soli-yearly">–</td>
+                    </tr>
+                    <tr>
+                      <td>Kirchensteuer</td>
+                      <td class="col-num" id="result-kist-monthly">–</td>
+                      <td class="col-num" id="result-kist-yearly">–</td>
+                    </tr>
+                    <tr class="breakdown-table__subtotal">
+                      <td><strong>Steuern gesamt</strong></td>
+                      <td class="col-num"><strong id="result-taxes-monthly">–</strong></td>
+                      <td class="col-num"><strong id="result-taxes-yearly">–</strong></td>
+                    </tr>
+
+                    <tr class="breakdown-table__section-head">
+                      <th scope="row" colspan="3">Sozialversicherung Arbeitnehmer</th>
+                    </tr>
+                    <tr>
+                      <td>Krankenversicherung (AN)</td>
+                      <td class="col-num" id="result-kv-an-monthly">–</td>
+                      <td class="col-num" id="result-kv-an-yearly">–</td>
+                    </tr>
+                    <tr>
+                      <td>Pflegeversicherung (AN)</td>
+                      <td class="col-num" id="result-pv-an-monthly">–</td>
+                      <td class="col-num" id="result-pv-an-yearly">–</td>
+                    </tr>
+                    <tr>
+                      <td>Rentenversicherung (AN)</td>
+                      <td class="col-num" id="result-rv-an-monthly">–</td>
+                      <td class="col-num" id="result-rv-an-yearly">–</td>
+                    </tr>
+                    <tr>
+                      <td>Arbeitslosenversicherung (AN)</td>
+                      <td class="col-num" id="result-av-an-monthly">–</td>
+                      <td class="col-num" id="result-av-an-yearly">–</td>
+                    </tr>
+                    <tr class="breakdown-table__subtotal">
+                      <td><strong>SV Arbeitnehmer gesamt</strong></td>
+                      <td class="col-num"><strong id="result-sv-an-monthly">–</strong></td>
+                      <td class="col-num"><strong id="result-sv-an-yearly">–</strong></td>
+                    </tr>
+
+                    <tr class="breakdown-table__total">
+                      <td><strong>Abzüge gesamt (AN)</strong></td>
+                      <td class="col-num"><strong id="result-deductions-monthly">–</strong></td>
+                      <td class="col-num"><strong id="result-deductions-yearly">–</strong></td>
+                    </tr>
+
+                    <tr class="breakdown-table__net">
+                      <td><strong>Netto</strong></td>
+                      <td class="col-num result-net-cell"><strong id="result-net-monthly-table">–</strong></td>
+                      <td class="col-num result-net-cell"><strong id="result-net-yearly-table">–</strong></td>
+                    </tr>
+
+                    <tr>
+                      <td>Effektive Abgabenquote</td>
+                      <td class="col-num" id="result-rate" colspan="2">–</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- Arbeitgeber -->
+                <details class="ag-section">
+                  <summary class="ag-section__toggle">Arbeitgeberanteile und Gesamtkosten</summary>
+                  <table class="breakdown-table">
+                    <caption class="breakdown-table__caption">Arbeitgeber-Kosten (geschätzt)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Position</th>
+                        <th scope="col" class="col-num">Monatlich</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>KV (AG)</td>
+                        <td class="col-num" id="result-kv-ag-monthly">–</td>
+                      </tr>
+                      <tr>
+                        <td>PV (AG)</td>
+                        <td class="col-num" id="result-pv-ag-monthly">–</td>
+                      </tr>
+                      <tr>
+                        <td>RV (AG)</td>
+                        <td class="col-num" id="result-rv-ag-monthly">–</td>
+                      </tr>
+                      <tr>
+                        <td>AV (AG)</td>
+                        <td class="col-num" id="result-av-ag-monthly">–</td>
+                      </tr>
+                      <tr class="breakdown-table__subtotal">
+                        <td><strong>SV Arbeitgeber gesamt</strong></td>
+                        <td class="col-num"><strong id="result-sv-ag-monthly">–</strong></td>
+                      </tr>
+                      <tr class="breakdown-table__total">
+                        <td><strong>Arbeitgebergesamtkosten</strong></td>
+                        <td class="col-num"><strong id="result-employer-cost-monthly">–</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Jährliche Gesamtkosten</td>
+                        <td class="col-num" id="result-employer-cost-yearly">–</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </details>
+
+              </section>
+
+              <!-- Warnungen -->
+              <div id="warnings-container" class="warnings-container" aria-live="polite" hidden></div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ DISCLAIMER ============ -->
+        <div class="disclaimer" role="note" aria-label="Unverbindlichkeitserklärung">
+          <strong>Hinweis:</strong> Die Berechnung ist unverbindlich und ersetzt keine Lohnabrechnung, Steuerberatung oder Auskunft von Finanzamt oder Krankenkasse. Steuerliche und beitragsrechtliche Einzelfälle können von den dargestellten Ergebnissen abweichen.
+        </div>
+
+        <!-- ============ STEUERINFO ============ -->
+        <section class="tax-info-section" aria-labelledby="tax-info-heading">
+          <h2 id="tax-info-heading">Lohnsteuer 2026 – Freibetrag & Steuersätze</h2>
+          <div id="tax-info-container"></div>
+        </section>
+
+        <!-- ============ ERKLÄRUNGEN ============ -->
+        <section class="info-section" aria-labelledby="info-heading">
+          <h2 id="info-heading">Wissenswertes zum Brutto-Netto-Rechner</h2>
+
+          <div class="info-grid">
+
+            <article class="info-card">
+              <h3>Was bedeutet Brutto und Netto?</h3>
+              <p>
+                Das <strong>Bruttogehalt</strong> ist das vertraglich vereinbarte Gehalt vor allen Abzügen.
+                Das <strong>Nettogehalt</strong> ist der Betrag, der nach Abzug von Lohnsteuer,
+                Solidaritätszuschlag, Kirchensteuer (falls zutreffend) und den Sozialversicherungsbeiträgen
+                tatsächlich auf Ihr Konto überwiesen wird.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h3>Steuerklassen I bis VI</h3>
+              <p>
+                Die Lohnsteuerklasse bestimmt maßgeblich die monatliche Steuerbelastung:
+              </p>
+              <ul>
+                <li><strong>I:</strong> Ledige, Geschiedene, dauerhaft Getrenntlebende</li>
+                <li><strong>II:</strong> Alleinerziehende (Entlastungsbetrag)</li>
+                <li><strong>III:</strong> Verheiratete, günstigere Hälfte (i. d. R. höheres Einkommen)</li>
+                <li><strong>IV:</strong> Verheiratete mit ähnlichem Einkommen (je)</li>
+                <li><strong>V:</strong> Verheiratete, ungünstigere Hälfte (i. d. R. niedrigeres Einkommen)</li>
+                <li><strong>VI:</strong> Zweites/weiteres Dienstverhältnis</li>
+              </ul>
+            </article>
+
+            <article class="info-card">
+              <h3>GKV-Zusatzbeitrag</h3>
+              <p>
+                Neben dem allgemeinen GKV-Beitragssatz (14,6 %) erhebt jede Krankenkasse einen
+                individuellen <strong>Zusatzbeitrag</strong>. Der bundesweite Durchschnittswert für 2026
+                beträgt <strong>2,9 %</strong>. Er wird paritätisch je zur Hälfte von Arbeitnehmer
+                und Arbeitgeber getragen.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h3>Beitragsbemessungsgrenzen 2026</h3>
+              <p>
+                Sozialversicherungsbeiträge werden nur bis zu einer Einkommensgrenze erhoben:
+              </p>
+              <ul>
+                <li><strong>KV/PV:</strong> 5.812,50 €/Monat (69.750 €/Jahr)</li>
+                <li><strong>RV/AV:</strong> 8.450 €/Monat (101.400 €/Jahr)</li>
+              </ul>
+              <p>
+                Verdienen Sie mehr, sinkt der prozentuale SV-Anteil am Gehalt.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h3>Pflegeversicherung</h3>
+              <p>
+                Der PV-Beitrag hängt von Kinderanzahl und Bundesland ab. Kinderlose Arbeitnehmer ab 23 Jahren
+                zahlen einen Zuschlag. In <strong>Sachsen</strong> gilt eine abweichende Aufteilung
+                zwischen Arbeitnehmer und Arbeitgeber (höherer AN-Anteil).
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h3>Kirchensteuer</h3>
+              <p>
+                Die Kirchensteuer beträgt <strong>8 %</strong> der Lohnsteuer in Bayern und
+                Baden-Württemberg, in allen anderen Bundesländern <strong>9 %</strong>.
+                Sie wird nur erhoben, wenn Sie kirchensteuerpflichtig sind.
+              </p>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ============ KRANKENKASSEN ============ -->
+        <section class="kassen-section" aria-labelledby="kassen-heading">
+          <h2 id="kassen-heading">GKV-Zusatzbeiträge 2026 im Vergleich</h2>
+          <p class="kassen-intro">
+            Alle gesetzlichen Krankenkassen mit ihrem kassenindividuellen Zusatzbeitrag 2026.
+            Der einheitliche Basissatz beträgt 14,6 % (AN + AG je 7,3 %). Zum Gesamtbeitrag
+            kommt der jeweilige Zusatzbeitrag hinzu, der paritätisch geteilt wird.
+            <strong>Der „↑ Rechner"-Button übernimmt den Zusatzbeitrag direkt in die Kalkulation.</strong>
+            <br>
+            PKV-Versicherte zahlen individuell kalkulierte Prämien — ein einheitlicher
+            Zusatzbeitrag existiert in der PKV nicht.
+          </p>
+          <div id="kassen-table-container"></div>
+        </section>
+
+        <!-- ============ QUELLEN ============ -->
+        <section class="sources-section" aria-labelledby="sources-heading">
+          <h2 id="sources-heading">Quellen und Datenstand</h2>
+          <ul class="sources-list">
+            <li>
+              <strong>Lohnsteuerberechnung:</strong> BMF Programmablaufplan 2026 (PAP 2026),
+              Bundesministerium der Finanzen, Stand November 2025.
+            </li>
+            <li>
+              <strong>Sozialversicherungswerte 2026:</strong> BMAS Rechengrößen 2026,
+              GKV-Spitzenverband, Bundesgesundheitsministerium.
+            </li>
+            <li>
+              <strong>Kirchensteuersätze:</strong> Landeskirchen und Bistümer, Stand 2026.
+            </li>
+            <li>
+              <strong>Datenstand:</strong> Januar 2026. Alle Angaben ohne Gewähr.
+            </li>
+          </ul>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          Brutto-Netto-Rechner 2026 – Alle Berechnungen erfolgen lokal im Browser.
+          Es werden keine Daten übermittelt oder gespeichert.
+        </p>
+        <div class="site-footer__branding">
+          <img
+            src="/assets/veit-bds-logo.png"
+            alt="Veit-BDS"
+            class="site-footer__logo"
+            onerror="this.style.display='none'"
+          />
+          <span>Gebaut von <strong>Veit-BDS</strong></span>
+        </div>
+        <p class="site-footer__links">
+          <a href="#main-content">Nach oben</a>
+          &nbsp;·&nbsp;
+          <button class="site-footer__legal-btn" id="btn-impressum">Impressum</button>
+          &nbsp;·&nbsp;
+          <button class="site-footer__legal-btn" id="btn-datenschutz">Datenschutz</button>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
